@@ -46,6 +46,7 @@ def register():
         session["user"] = request.form.get("username").lower()
         flash("Registration Successful!")
         return redirect(url_for("profile", username=session["user"]))
+
     return render_template("register.html")
 
 
@@ -92,7 +93,7 @@ def profile(username):
 
 @app.route("/logout")
 def logout():
-    # remove user from session cookies
+    # remove user from session cookie
     flash("You have been logged out")
     session.pop("user")
     return redirect(url_for("login"))
@@ -100,7 +101,7 @@ def logout():
 
 @app.route("/add_task", methods=["GET", "POST"])
 def add_task():
-    if request.method == 'POST':
+    if request.method == "POST":
         is_urgent = "on" if request.form.get("is_urgent") else "off"
         task = {
             "category_name": request.form.get("category_name"),
@@ -111,7 +112,7 @@ def add_task():
             "created_by": session["user"]
         }
         mongo.db.tasks.insert_one(task)
-        flash("Task Succesfully Added")
+        flash("Task Successfully Added")
         return redirect(url_for("get_tasks"))
 
     categories = mongo.db.categories.find().sort("category_name", 1)
